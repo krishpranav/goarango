@@ -1,5 +1,7 @@
 package requests
 
+import "encoding/json"
+
 type JWTAuth struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -11,4 +13,9 @@ func (r *JWTAuth) Path() string {
 
 func (r *JWTAuth) Method() string {
 	return "POST"
+}
+
+func (r *JWTAuth) Generate() []byte {
+	m, _ := json.Marshal(r)
+	return m
 }
