@@ -2,6 +2,7 @@ package requests
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -38,6 +39,24 @@ func (a *AQL) Bind(name string, value interface{}) *AQL {
 func (a *AQL) Path() string {
 	return "/_api/cursor"
 }
+
+func (a *AQL) Method() string {
+	return "POST"
+}
+
+func (a *AQL) Generate() []byte {
+	type AQLFmt struct {
+		Query     string                 `json:"query"`
+		BindVars  map[string]interface{} `json:"bindVars,omitempty"`
+		Cache     *bool                  `json:"cache,omitempty"`
+		BatchSize int                    `json:"batchSize,omitempty"`
+	}
+
+	jsonAQL, _ := json.Marshal(&AQLFmt{Query: a.query, BindVars: a.bindVars, Cache: a.cache, BatchSize: a.batchSize})
+
+	return jsonAQL
+}
+
 func processAQL(query string) string {
 	buf := bytes.NewBuffer(nil)
 	space := false
