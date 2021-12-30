@@ -13,3 +13,7 @@ func (r *FollowCursor) Path() string {
 func (r *FollowCursor) Method() string {
 	return "PUT"
 }
+
+func (r *FollowCursor) Generate() []byte {
+	return nil
+}
